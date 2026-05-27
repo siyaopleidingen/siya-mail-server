@@ -9,25 +9,20 @@ const imaps        = require('imap-simple');
 const app  = express();
 const PORT = process.env.PORT || 3001;
 
-// CORS: altijd toegestaan voor Netlify + localhost; aanvullende origins via env var
-const NETLIFY_ORIGIN = 'https://siya-certificaten.netlify.app';
-const extraOrigins   = (process.env.CORS_ORIGINS || '')
+const extraOrigins = (process.env.CORS_ORIGINS || '')
   .split(',').map(o => o.trim()).filter(Boolean);
-const allowedOrigins = [NETLIFY_ORIGIN, ...extraOrigins];
 
 app.use(cors({
-  origin: (origin, callback) => {
-    if (
-      !origin ||                                    // file://, curl, Postman
-      origin.startsWith('http://localhost') ||
-      origin.startsWith('http://127.0.0.1') ||
-      allowedOrigins.includes(origin)
-    ) {
-      callback(null, true);
-    } else {
-      callback(null, false);                        // weiger zonder crash
-    }
-  }
+  origin: [
+    'https://siya-certificaten.netlify.app',
+    'http://localhost',
+    'http://localhost:3001',
+    'http://127.0.0.1',
+    'http://127.0.0.1:3001',
+    ...extraOrigins
+  ],
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type']
 }));
 
 app.use(express.json({ limit: '50mb' }));
