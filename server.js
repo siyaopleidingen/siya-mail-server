@@ -153,4 +153,4 @@ app.use((err, _req, res, _next) => {
   res.status(err.status || 500).json({ success: false, message: err.message || 'Interne serverfout' });
 });
 
-app.listen(PORT, () => console.log(`SIYA mail server draait op poort ${PORT}`));
+app.listen(PORT, '0.0.0.0', () => console.log(`SIYA mail server draait op poort ${PORT}`));
