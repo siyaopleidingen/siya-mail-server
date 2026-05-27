@@ -15,7 +15,7 @@ const MailComposer = require('nodemailer/lib/mail-composer');
 const imaps        = require('imap-simple');
 
 const app  = express();
-const PORT = process.env.PORT || 3001;
+const PORT = parseInt(process.env.PORT, 10) || 3001;
 
 const extraOrigins = (process.env.CORS_ORIGINS || '')
   .split(',').map(o => o.trim()).filter(Boolean);
@@ -85,6 +85,7 @@ async function appendToSent(rawMsg) {
   }
 }
 
+app.get('/ping',   (_req, res) => res.send('pong'));
 app.get('/health', (_req, res) => res.json({ status: 'ok', port: PORT }));
 
 app.post('/send-email', async (req, res) => {
@@ -158,4 +159,7 @@ app.use((err, _req, res, _next) => {
   res.status(err.status || 500).json({ success: false, message: err.message || 'Interne serverfout' });
 });
 
-app.listen(PORT, '0.0.0.0', () => console.log(`SIYA mail server draait op poort ${PORT}`));
+const server = app.listen(PORT, '0.0.0.0', () => {
+  const addr = server.address();
+  console.log(`SIYA mail server gestart — adres: ${addr.address}:${addr.port} (family: ${addr.family})`);
+});
