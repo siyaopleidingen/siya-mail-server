@@ -17,21 +17,13 @@ const imaps        = require('imap-simple');
 const app  = express();
 const PORT = parseInt(process.env.PORT, 10) || 3001;
 
-const extraOrigins = (process.env.CORS_ORIGINS || '')
-  .split(',').map(o => o.trim()).filter(Boolean);
-
-app.use(cors({
-  origin: [
-    'https://siya-certificaten.netlify.app',
-    'http://localhost',
-    'http://localhost:3001',
-    'http://127.0.0.1',
-    'http://127.0.0.1:3001',
-    ...extraOrigins
-  ],
-  methods: ['GET', 'POST'],
-  allowedHeaders: ['Content-Type']
-}));
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  if (req.method === 'OPTIONS') return res.sendStatus(200);
+  next();
+});
 
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
