@@ -3,6 +3,11 @@ process.on('unhandledRejection', e => { console.error('CRASH unhandledRejection:
 
 require('dotenv').config();
 
+console.log('=== SIYA STARTUP ===');
+console.log('PORT env:', process.env.PORT);
+console.log('NODE_ENV:', process.env.NODE_ENV);
+console.log('Env vars aanwezig:', Object.keys(process.env).filter(k => !k.startsWith('npm_')).join(', '));
+
 const express      = require('express');
 const cors         = require('cors');
 const nodemailer   = require('nodemailer');
