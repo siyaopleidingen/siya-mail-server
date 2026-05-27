@@ -113,8 +113,10 @@ Directeur — SIYA Opleidingen`;
   const safeNaam = naam.replace(/\s+/g, '_').replace(/[^A-Za-z0-9_-]/g, '');
   const safeCert = certnr.replace(/[^A-Za-z0-9_-]/g, '');
 
+  const smtpFrom = process.env.SMTP_FROM || '"SIYA Opleidingen" <GDN1@wannatel.com>';
   const mailOptions = {
-    from:    process.env.SMTP_FROM || `"SIYA Opleidingen" <${process.env.SMTP_USER}>`,
+    from:    smtpFrom,
+    sender:  smtpFrom,
     replyTo: 'GDN1@wannatel.com',
     to:      email,
     subject,
