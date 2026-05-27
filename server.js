@@ -1,3 +1,6 @@
+process.on('uncaughtException',  e => { console.error('CRASH uncaughtException:', e.message, e.stack); process.exit(1); });
+process.on('unhandledRejection', e => { console.error('CRASH unhandledRejection:', e); process.exit(1); });
+
 require('dotenv').config();
 
 const express      = require('express');
