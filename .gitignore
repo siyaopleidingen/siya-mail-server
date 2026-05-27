@@ -26,6 +26,9 @@ cert_b64.txt
 # Test bestanden
 _test_js.js
 
+# Claude Code intern
+.claude/
+
 # Logs
 *.log
 npm-debug.log*
