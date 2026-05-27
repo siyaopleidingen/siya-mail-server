@@ -1,0 +1,31 @@
+# Dependencies
+node_modules/
+
+# Credentials
+.env
+
+# Node-windows service daemon
+daemon/
+
+# Lokale app-bestanden (niet nodig op Railway)
+index.html
+config.js
+netlify.toml
+install-service.js
+uninstall-service.js
+
+# Certificaat-bestanden
+*.pdf
+*.png
+*.txt
+cert_b64.txt
+
+# Python scripts
+*.py
+
+# Test bestanden
+_test_js.js
+
+# Logs
+*.log
+npm-debug.log*
