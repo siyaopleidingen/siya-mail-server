@@ -9,21 +9,23 @@ const imaps        = require('imap-simple');
 const app  = express();
 const PORT = process.env.PORT || 3001;
 
-// CORS: sta localhost (alle poorten + file://) en geconfigureerde origins toe
-const allowedOrigins = (process.env.CORS_ORIGINS || '')
+// CORS: altijd toegestaan voor Netlify + localhost; aanvullende origins via env var
+const NETLIFY_ORIGIN = 'https://siya-certificaten.netlify.app';
+const extraOrigins   = (process.env.CORS_ORIGINS || '')
   .split(',').map(o => o.trim()).filter(Boolean);
+const allowedOrigins = [NETLIFY_ORIGIN, ...extraOrigins];
 
 app.use(cors({
   origin: (origin, callback) => {
     if (
-      !origin ||                                          // file://, curl, Postman
+      !origin ||                                    // file://, curl, Postman
       origin.startsWith('http://localhost') ||
       origin.startsWith('http://127.0.0.1') ||
       allowedOrigins.includes(origin)
     ) {
       callback(null, true);
     } else {
-      callback(new Error(`CORS geblokkeerd: ${origin}`));
+      callback(null, false);                        // weiger zonder crash
     }
   }
 }));
@@ -141,6 +143,12 @@ Directeur — SIYA Opleidingen`;
     console.error('SMTP fout:', err.message);
     res.status(500).json({ success: false, message: err.message });
   }
+});
+
+// Globale error handler — altijd JSON, nooit HTML
+app.use((err, _req, res, _next) => {
+  console.error('Onafgehandelde fout:', err.message);
+  res.status(err.status || 500).json({ success: false, message: err.message || 'Interne serverfout' });
 });
 
 app.listen(PORT, () => console.log(`SIYA mail server draait op poort ${PORT}`));
