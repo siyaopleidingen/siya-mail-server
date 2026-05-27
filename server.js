@@ -33,11 +33,11 @@ app.use(cors({
 app.use(express.json({ limit: '10mb' }));
 
 const SMTP_CONFIG = {
-  host:   process.env.SMTP_HOST || 'wannatel.com',
-  port:   parseInt(process.env.SMTP_PORT) || 465,
-  secure: true,
+  host:   process.env.SMTP_HOST || 'smtp.gmail.com',
+  port:   parseInt(process.env.SMTP_PORT) || 587,
+  secure: false,   // STARTTLS (Gmail vereist dit op poort 587)
   auth: {
-    user: process.env.SMTP_USER || 'GDN1@wannatel.com',
+    user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASS
   }
 };
@@ -114,8 +114,9 @@ Directeur — SIYA Opleidingen`;
   const safeCert = certnr.replace(/[^A-Za-z0-9_-]/g, '');
 
   const mailOptions = {
-    from: `"SIYA Opleidingen" <${process.env.SMTP_USER || 'GDN1@wannatel.com'}>`,
-    to:   email,
+    from:    process.env.SMTP_FROM || `"SIYA Opleidingen" <${process.env.SMTP_USER}>`,
+    replyTo: 'GDN1@wannatel.com',
+    to:      email,
     subject,
     text: body,
     attachments: [{
