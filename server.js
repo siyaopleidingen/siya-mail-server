@@ -30,8 +30,8 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 const SMTP_CONFIG = {
   host:   process.env.SMTP_HOST || 'smtp.gmail.com',
-  port:   parseInt(process.env.SMTP_PORT) || 587,
-  secure: false,   // STARTTLS (Gmail vereist dit op poort 587)
+  port:   parseInt(process.env.SMTP_PORT) || 465,
+  secure: true,   // SSL op poort 465
   auth: {
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASS
