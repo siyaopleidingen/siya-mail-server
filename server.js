@@ -36,11 +36,12 @@ app.get('/test-mail', async (req, res) => {
   console.log('[test-mail] Versturen naar:', to, '| from:', FROM_ADDRESS);
   try {
     const { data, error } = await resend.emails.send({
-      from:     FROM_ADDRESS,
+      from:    FROM_ADDRESS,
       to,
-      replyTo:  REPLY_TO,
-      subject:  'SIYA test mail',
-      text:     'Dit is een test mail van de Railway/Resend server.'
+      bcc:     [REPLY_TO],
+      replyTo: REPLY_TO,
+      subject: 'SIYA test mail',
+      text:    'Dit is een test mail van de Railway/Resend server.'
     });
     if (error) {
       console.error('[test-mail] Resend fout:', error);
@@ -81,6 +82,7 @@ Certificaatnummer: ${certnr}</p>
     const { data, error } = await resend.emails.send({
       from:        FROM_ADDRESS,
       to:          email,
+      bcc:         [REPLY_TO],
       replyTo:     REPLY_TO,
       subject,
       html,
