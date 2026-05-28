@@ -25,7 +25,7 @@ app.use((req, res, next) => {
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
-const FROM_ADDRESS = process.env.RESEND_FROM || 'SIYA Opleidingen <onboarding@resend.dev>';
+const FROM_ADDRESS = process.env.RESEND_FROM || 'SIYA Opleidingen <GDN1@wannatel.com>';
 const REPLY_TO     = 'GDN1@wannatel.com';
 
 app.get('/ping',   (_req, res) => res.send('pong'));
