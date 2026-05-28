@@ -80,6 +80,25 @@ async function appendToSent(rawMsg) {
 app.get('/ping',   (_req, res) => res.send('pong'));
 app.get('/health', (_req, res) => res.json({ status: 'ok', port: PORT }));
 
+app.get('/test-mail', async (req, res) => {
+  const to = req.query.to || process.env.SMTP_USER;
+  console.log('[test-mail] SMTP config:', { host: SMTP_CONFIG.host, port: SMTP_CONFIG.port, user: SMTP_CONFIG.auth.user });
+  try {
+    const transporter = nodemailer.createTransport(SMTP_CONFIG);
+    const info = await transporter.sendMail({
+      from:    process.env.SMTP_FROM || `"SIYA Test" <${SMTP_CONFIG.auth.user}>`,
+      to,
+      subject: 'SIYA test mail',
+      text:    'Dit is een test mail van de Railway server.'
+    });
+    console.log('[test-mail] Verstuurd:', info.messageId);
+    res.json({ success: true, messageId: info.messageId, to });
+  } catch (err) {
+    console.error('[test-mail] SMTP fout:', err.message, err.code, err.response);
+    res.status(500).json({ success: false, message: err.message, code: err.code, response: err.response });
+  }
+});
+
 app.post('/send-email', async (req, res) => {
   const { naam, training, datum, certnr, email, pdf_base64 } = req.body;
 
@@ -140,8 +159,8 @@ Directeur — SIYA Opleidingen`;
 
     res.json({ success: true, messageId: info.messageId });
   } catch (err) {
-    console.error('SMTP fout:', err.message);
-    res.status(500).json({ success: false, message: err.message });
+    console.error('SMTP fout:', err.message, '| code:', err.code, '| response:', err.response);
+    res.status(500).json({ success: false, message: err.message, code: err.code, response: err.response });
   }
 });
 
